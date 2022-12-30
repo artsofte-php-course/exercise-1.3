@@ -1,0 +1,22 @@
+function mortgagePaymentSchedule($annualInterestRate, $propertyCost, $downPayment, $loanTermMonths) {	
+    // Расчёт месячной процентной ставки
+    $monthlyInterestRate = $annualInterestRate / 12;
+    $loanAmount = $propertyCost - $downPayment
+    //Эта строка  вычисляет ежемесячный платеж по ипотеке 
+    $monthlyPayment = ($monthlyInterestRate * $loanAmount) / (1 - pow((1 + $monthlyInterestRate), -$loanTermMonths));
+
+    $paymentSchedule = [];
+    //Эти строки кода являются частью цикла for, который повторяет срок кредита в месяцах и вычисляет график платежей по ипотеке для каждого месяца
+    $balance = $loanAmount;
+    for ($i = 1; $i <= $loanTermMonths; $i++) {
+        $basicPayment = $monthlyPayment - ($balance * $monthlyInterestRate);
+        $loanPayment = $monthlyPayment - $basicPayment;
+        $balance -= $basicPayment;
+        $paymentSchedule[$i] = [
+            "basicPayment" => $basicPayment,
+            "loanPayment" => $loanPayment,
+            "balance" => $balance
+        ];
+    }
+    return $paymentSchedule;
+}
